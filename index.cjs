@@ -2684,10 +2684,10 @@ var coreExports = requireCore();
 
 var github = {};
 
-var context = {};
+var context$1 = {};
 
-Object.defineProperty(context, "__esModule", { value: true });
-context.Context = void 0;
+Object.defineProperty(context$1, "__esModule", { value: true });
+context$1.Context = void 0;
 const fs_1 = require$$0$2;
 const os_1 = require$$0$1;
 let Context$1 = class Context {
@@ -2737,7 +2737,7 @@ let Context$1 = class Context {
         throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'");
     }
 };
-context.Context = Context$1;
+context$1.Context = Context$1;
 
 var utils$4 = {};
 
@@ -87631,7 +87631,7 @@ var require$$4 = /*@__PURE__*/getAugmentedNamespace(distWeb);
 	};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getOctokitOptions = exports.GitHub = exports.defaults = exports.context = void 0;
-	const Context = __importStar(context);
+	const Context = __importStar(context$1);
 	const Utils = __importStar(utils$3);
 	// octokit + plugins
 	const core_1 = require$$2;
@@ -87685,10 +87685,10 @@ var __importStar = (commonjsGlobal && commonjsGlobal.__importStar) || function (
     return result;
 };
 Object.defineProperty(github, "__esModule", { value: true });
-var getOctokit_1 = github.getOctokit = github.context = void 0;
-const Context = __importStar(context);
+var getOctokit_1 = github.getOctokit = context = github.context = void 0;
+const Context = __importStar(context$1);
 const utils_1 = utils$4;
-github.context = new Context.Context();
+var context = github.context = new Context.Context();
 /**
  * Returns a hydrated octokit ready to use for GitHub Actions
  *
@@ -99550,7 +99550,10 @@ const parseChangelogAST = (AST) => {
 const getLatestReleases = async () => {
   const token = coreExports.getInput("github-token");
   const octokit = getOctokit_1(token);
-  const releases = await octokit.rest.repos.listReleases();
+  const releases = await octokit.rest.repos.listReleases({
+    owner: context.repo.owner,
+    repo: context.repo.repo
+  });
   console.log(releases);
 };
 try {
