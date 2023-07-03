@@ -1,5 +1,10 @@
 name: 'Changelog create release'
 description: 'Creates a new release whenever CHANGELOG.md changes'
+inputs:
+  github-token:
+    description: 'GITHUB TOKEN'
+    required: true
+    default: ''
 outputs:
   time:
     description: 'The time we greeted you'
