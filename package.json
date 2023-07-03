@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup -c --configPlugin rollup-plugin-esbuild",
-    "build:dev": "rollup -c --configPlugin rollup-plugin-esbuild",
+    "build": "rollup -c --configPlugin rollup-plugin-esbuild",
     "prepare": "husky install"
   },
   "keywords": [],

@@ -18,9 +18,7 @@ export default {
     commonjs(),
     nodeResolve({ preferBuiltins: true }),
     json(),
-    esbuild({
-      minify: process.env.NODE_ENV === 'production',
-    }),
+    esbuild(),
   ],
   external: [...pkgs(devDependencies), 'crypto'],
 };
