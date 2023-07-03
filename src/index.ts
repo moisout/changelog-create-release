@@ -1,3 +1,4 @@
+import './polyfills/crypto';
 import { setOutput, setFailed } from '@actions/core';
 import { context as githubContext } from '@actions/github';
 

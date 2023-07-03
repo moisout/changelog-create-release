@@ -12,15 +12,15 @@ export default {
   output: {
     file: 'index.cjs',
     format: 'cjs',
+    globals: { crypto: 'crypto' },
   },
   plugins: [
     commonjs(),
-    nodeResolve(),
+    nodeResolve({ preferBuiltins: true }),
     json(),
     esbuild({
       minify: process.env.NODE_ENV === 'production',
-      treeShaking: true,
     }),
   ],
-  external: [...pkgs(devDependencies)],
+  external: [...pkgs(devDependencies), 'crypto'],
 };
