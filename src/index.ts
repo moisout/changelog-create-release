@@ -1,6 +1,6 @@
 import './polyfills/crypto';
 import { getInput, setFailed } from '@actions/core';
-import { getOctokit } from '@actions/github';
+import { getOctokit, context } from '@actions/github';
 import fs from 'fs';
 import MarkdownIt from 'markdown-it';
 import { Changelog } from './types/Changelog';
@@ -28,7 +28,10 @@ const getLatestReleases = async () => {
 
   const octokit = getOctokit(token);
 
-  const releases = await octokit.rest.repos.listReleases();
+  const releases = await octokit.rest.repos.listReleases({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+  });
 
   console.log(releases);
 };
