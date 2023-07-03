@@ -1,19 +1,26 @@
 import esbuild from 'rollup-plugin-esbuild';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import packageJson from './package.json' assert { type: 'json' };
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 
-const { dependencies, devDependencies } = packageJson;
+const { devDependencies } = packageJson;
 const pkgs = <T>(el: T) => Object.keys(el);
 
 export default {
   input: 'src/index.ts',
   output: {
-    file: 'index.js',
+    file: 'index.cjs',
     format: 'cjs',
   },
   plugins: [
+    commonjs(),
+    nodeResolve(),
+    json(),
     esbuild({
       minify: process.env.NODE_ENV === 'production',
+      treeShaking: true,
     }),
   ],
-  external: [...pkgs(dependencies), ...pkgs(devDependencies)],
+  external: [...pkgs(devDependencies)],
 };

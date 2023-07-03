@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c --configPlugin rollup-plugin-esbuild",
+    "build": "cross-env NODE_ENV=production rollup -c --configPlugin rollup-plugin-esbuild",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -15,10 +15,14 @@
     "@actions/github": "^5.1.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.2",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
     "@types/node": "^20.3.3",
     "esbuild": "^0.18.11",
     "husky": "^8.0.0",
     "rollup": "^3.26.0",
-    "rollup-plugin-esbuild": "^5.0.0"
+    "rollup-plugin-esbuild": "^5.0.0",
+    "cross-env": "^7.0.3"
   }
 }

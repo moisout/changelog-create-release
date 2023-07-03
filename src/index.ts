@@ -1,13 +1,15 @@
-import core from '@actions/core';
-import github from '@actions/github';
+import { setOutput, setFailed } from '@actions/core';
+import { context as githubContext } from '@actions/github';
+
+const a: string = 'a';
 
 try {
   console.log(`Hello user!`);
   const time = new Date().toTimeString();
-  core.setOutput('time', time);
+  setOutput('time', time);
 
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
+  const payload = JSON.stringify(githubContext.payload, undefined, 2);
   console.log(`The event payload: ${payload}`);
 } catch (error) {
-  core.setFailed(error.message);
+  setFailed(error.message);
 }
