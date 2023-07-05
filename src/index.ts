@@ -23,7 +23,7 @@ const parseChangelogAST = (AST: Changelog) => {
   console.log(potentialReleases);
 };
 
-const getLatestReleases = async () => {
+const getLatestRelease = async () => {
   const token = getInput('github-token');
 
   const octokit = getOctokit(token);
@@ -34,10 +34,11 @@ const getLatestReleases = async () => {
   });
 
   console.log(releases);
+  const latestRelease = releases.data[0];
+  return latestRelease;
 };
 
-try {
-  console.log(`Hello user!`);
+const updateOrCreateRelease = async () => {
   const changelog = fs.readFileSync('./CHANGELOG.md', 'utf8');
 
   const parser = new MarkdownIt();
@@ -45,7 +46,12 @@ try {
   const AST = parser.parse(changelog, {});
   parseChangelogAST(AST);
 
-  getLatestReleases();
+  const latestRelease = await getLatestRelease();
+};
+
+try {
+  console.log(`Hello user!`);
+  updateOrCreateRelease();
 
   // const payload = JSON.stringify(githubContext.payload, undefined, 2);
   // console.log(`The event payload: ${payload}`);
