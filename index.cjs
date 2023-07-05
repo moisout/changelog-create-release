@@ -99547,7 +99547,7 @@ const parseChangelogAST = (AST) => {
   });
   console.log(potentialReleases);
 };
-const getLatestReleases = async () => {
+const getLatestRelease = async () => {
   const token = coreExports.getInput("github-token");
   const octokit = getOctokit_1(token);
   const releases = await octokit.rest.repos.listReleases({
@@ -99555,14 +99555,19 @@ const getLatestReleases = async () => {
     repo: context.repo.repo
   });
   console.log(releases);
+  const latestRelease = releases.data[0];
+  return latestRelease;
 };
-try {
-  console.log(`Hello user!`);
+const updateOrCreateRelease = async () => {
   const changelog = require$$0$2.readFileSync("./CHANGELOG.md", "utf8");
   const parser = new MarkdownIt();
   const AST = parser.parse(changelog, {});
   parseChangelogAST(AST);
-  getLatestReleases();
+  await getLatestRelease();
+};
+try {
+  console.log(`Hello user!`);
+  updateOrCreateRelease();
 } catch (error) {
   coreExports.setFailed(error.message);
 }
