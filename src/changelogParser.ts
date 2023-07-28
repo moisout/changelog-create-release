@@ -1,3 +1,4 @@
+import semver from 'semver';
 import { Changelog } from './types/Changelog';
 import { ParsedChangelog } from './types/ParsedChangelog';
 
@@ -50,7 +51,9 @@ export const parseChangelogAST = (AST: Changelog) => {
         return parsedVersion;
       }
     }
-  }).filter(Boolean);
+  })
+    .filter(Boolean)
+    .sort((a, b) => semver.compare(b.version, a.version));
 
-  return parsedVersions[0];
+  return parsedVersions[parsedVersions.length - 1];
 };

@@ -1,6 +1,7 @@
 import { getOctokit, context } from '@actions/github';
 import { getInput } from '@actions/core';
 import { ParsedChangelog } from './types/ParsedChangelog';
+import semver from 'semver';
 
 export const getLatestRelease = async () => {
   const token = getInput('github-token');
@@ -12,7 +13,9 @@ export const getLatestRelease = async () => {
     repo: context.repo.repo,
   });
 
-  const latestRelease = releases.data[0];
+  const latestRelease = releases.data.sort((a, b) =>
+    semver.compare(b.tag_name, a.tag_name)
+  )[releases.data.length - 1];
   return latestRelease;
 };
 
