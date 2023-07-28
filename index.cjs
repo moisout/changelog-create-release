@@ -17558,7 +17558,7 @@ const parseChangelogAST = (AST) => {
     if (previousElement?.type === "heading_open" && previousElement?.tag === "h2" && nextElement2) {
       if (element.content !== "[Unreleased]") {
         const parsedVersion = {
-          version: element.children[1].content,
+          version: element.children[1].content?.split("-")?.[0],
           content: ""
         };
         for (let i = index + 2; i < AST.length; i++) {
