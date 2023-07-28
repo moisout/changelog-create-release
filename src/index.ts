@@ -16,8 +16,11 @@ const updateOrCreateRelease = async () => {
 
   const latestRelease = await getLatestRelease();
 
-  console.log('Latest release', latestRelease);
-  console.log('Latest version from changelog', latestVersionFromChangelog);
+  console.log('Latest release', latestRelease.name);
+  console.log(
+    'Latest version from changelog',
+    latestVersionFromChangelog.version
+  );
 
   if (semver.gt(latestVersionFromChangelog.version, latestRelease.tag_name)) {
     console.log('Creating draft release');
