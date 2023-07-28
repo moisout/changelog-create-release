@@ -14,6 +14,8 @@ const updateOrCreateRelease = async () => {
   const AST = parser.parse(changelog, {});
   const latestVersionFromChangelog = parseChangelogAST(AST);
 
+  console.log(latestVersionFromChangelog);
+
   const latestRelease = await getLatestRelease();
 
   if (semver.gt(latestRelease.tag_name, latestVersionFromChangelog.version)) {

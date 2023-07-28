@@ -36,7 +36,13 @@ export const parseChangelogAST = (AST: Changelog) => {
               if (element.type.includes('paragraph_close')) {
                 parsedVersion.content += '\n';
               } else {
-                parsedVersion.content += element.markup + element.content;
+                let spacing = '';
+
+                if (element.content.length > 0) {
+                  spacing = ' ';
+                }
+
+                parsedVersion.content += `${element.markup}${spacing}${element.content}`;
               }
             }
           }
