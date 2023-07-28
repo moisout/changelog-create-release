@@ -14,17 +14,9 @@ const updateOrCreateRelease = async () => {
   const AST = parser.parse(changelog, {});
   const latestVersionFromChangelog = parseChangelogAST(AST);
 
-  console.log(latestVersionFromChangelog);
-
   const latestRelease = await getLatestRelease();
 
-  console.log('latest release', semver.parse(latestRelease.tag_name));
-  console.log(
-    'latest version from changelog',
-    semver.parse(latestVersionFromChangelog.version)
-  );
-
-  if (semver.gt(latestRelease.tag_name, latestVersionFromChangelog.version)) {
+  if (semver.gt(latestVersionFromChangelog.version, latestRelease.tag_name)) {
     console.log('Creating draft release');
     createDraftRelease(latestVersionFromChangelog);
   } else {

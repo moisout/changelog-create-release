@@ -102648,9 +102648,8 @@ const updateOrCreateRelease = async () => {
   const parser = new MarkdownIt();
   const AST = parser.parse(changelog, {});
   const latestVersionFromChangelog = parseChangelogAST(AST);
-  console.log(latestVersionFromChangelog);
   const latestRelease = await getLatestRelease();
-  if (semver$1.gt(latestRelease.tag_name, latestVersionFromChangelog.version)) {
+  if (semver$1.gt(latestVersionFromChangelog.version, latestRelease.tag_name)) {
     console.log("Creating draft release");
     createDraftRelease(latestVersionFromChangelog);
   } else {
