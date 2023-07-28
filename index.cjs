@@ -99537,15 +99537,37 @@ var markdownIt = lib;
 var MarkdownIt = /*@__PURE__*/getDefaultExportFromCjs(markdownIt);
 
 const parseChangelogAST = (AST) => {
-  const potentialReleases = AST.filter((element, index) => {
+  let latestVersion;
+  AST.forEach((element, index) => {
     const previousElement = AST[index - 1];
-    if (previousElement?.type === "heading_open" && previousElement?.tag === "h2") {
-      return true;
+    const nextElement2 = AST[index + 2];
+    if (previousElement?.type === "heading_open" && previousElement?.tag === "h2" && nextElement2) {
+      if (element.content !== "[Unreleased]") {
+        latestVersion = {
+          version: element.children[1].content,
+          content: ""
+        };
+        AST.slice(index + 2, AST.length).forEach((element2, index2) => {
+          if (element2.type === "heading_open" && element2.tag === "h2") {
+            return;
+          }
+          if (element2.type === "heading_close") {
+            latestVersion.content += "\n";
+            return;
+          }
+          if (!(element2.type.includes("bullet_list") || element2.type.includes("list_item_close"))) {
+            if (element2.type.includes("paragraph_close")) {
+              latestVersion.content += "\n";
+            } else {
+              latestVersion.content += element2.markup + element2.content;
+            }
+          }
+        });
+      }
     }
-  }).filter((element) => {
-    return element.content !== "[Unreleased]";
   });
-  console.log(potentialReleases);
+  console.log("latest version");
+  console.log(latestVersion);
 };
 const getLatestRelease = async () => {
   const token = coreExports.getInput("github-token");
@@ -99563,10 +99585,11 @@ const updateOrCreateRelease = async () => {
   const parser = new MarkdownIt();
   const AST = parser.parse(changelog, {});
   parseChangelogAST(AST);
-  await getLatestRelease();
+  const latestRelease = await getLatestRelease();
+  console.log("latest release");
+  console.log(latestRelease);
 };
 try {
-  console.log(`Hello user!`);
   updateOrCreateRelease();
 } catch (error) {
   coreExports.setFailed(error.message);

@@ -17,5 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial version of the project
 
+### Fixed
+
+- Nothing
+- Nothing more
+
 [unreleased]: https://github.com/moisout/changelog-create-release/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/moisout/changelog-create-release/releases/tag/v1.0.0
