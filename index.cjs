@@ -14525,44 +14525,6 @@ var markdownIt = lib$1;
 
 var MarkdownIt = /*@__PURE__*/getDefaultExportFromCjs(markdownIt);
 
-const parseChangelogAST = (AST) => {
-  const parsedVersions = AST.map((element, index) => {
-    const previousElement = AST[index - 1];
-    const nextElement2 = AST[index + 2];
-    if (previousElement?.type === "heading_open" && previousElement?.tag === "h2" && nextElement2) {
-      if (element.content !== "[Unreleased]") {
-        const parsedVersion = {
-          version: element.children[1].content,
-          content: ""
-        };
-        for (let i = index + 2; i < AST.length; i++) {
-          const element2 = AST[i];
-          if (element2.type === "heading_open" && element2.tag === "h2") {
-            break;
-          }
-          if (element2.type === "heading_close") {
-            parsedVersion.content += "\n";
-          } else {
-            if (!(element2.type.includes("bullet_list") || element2.type.includes("list_item_close"))) {
-              if (element2.type.includes("paragraph_close")) {
-                parsedVersion.content += "\n";
-              } else {
-                let spacing = "";
-                if (element2.content.length > 0) {
-                  spacing = " ";
-                }
-                parsedVersion.content += `${element2.markup}${spacing}${element2.content}`;
-              }
-            }
-          }
-        }
-        return parsedVersion;
-      }
-    }
-  }).filter(Boolean);
-  return parsedVersions[0];
-};
-
 var re$2 = {exports: {}};
 
 // Note: this is the semver.org version of the spec that it implements
@@ -17588,6 +17550,44 @@ var semver = {
 };
 
 var semver$1 = /*@__PURE__*/getDefaultExportFromCjs(semver);
+
+const parseChangelogAST = (AST) => {
+  const parsedVersions = AST.map((element, index) => {
+    const previousElement = AST[index - 1];
+    const nextElement2 = AST[index + 2];
+    if (previousElement?.type === "heading_open" && previousElement?.tag === "h2" && nextElement2) {
+      if (element.content !== "[Unreleased]") {
+        const parsedVersion = {
+          version: element.children[1].content,
+          content: ""
+        };
+        for (let i = index + 2; i < AST.length; i++) {
+          const element2 = AST[i];
+          if (element2.type === "heading_open" && element2.tag === "h2") {
+            break;
+          }
+          if (element2.type === "heading_close") {
+            parsedVersion.content += "\n";
+          } else {
+            if (!(element2.type.includes("bullet_list") || element2.type.includes("list_item_close"))) {
+              if (element2.type.includes("paragraph_close")) {
+                parsedVersion.content += "\n";
+              } else {
+                let spacing = "";
+                if (element2.content.length > 0) {
+                  spacing = " ";
+                }
+                parsedVersion.content += `${element2.markup}${spacing}${element2.content}`;
+              }
+            }
+          }
+        }
+        return parsedVersion;
+      }
+    }
+  }).filter(Boolean).sort((a, b) => semver$1.compare(b.version, a.version));
+  return parsedVersions[parsedVersions.length - 1];
+};
 
 var github = {};
 
@@ -102615,7 +102615,9 @@ const getLatestRelease = async () => {
     owner: context.repo.owner,
     repo: context.repo.repo
   });
-  const latestRelease = releases.data[0];
+  const latestRelease = releases.data.sort(
+    (a, b) => semver$1.compare(b.name, a.name)
+  )[releases.data.length - 1];
   return latestRelease;
 };
 const createDraftRelease = async (latestVersion) => {
@@ -102649,8 +102651,11 @@ const updateOrCreateRelease = async () => {
   const AST = parser.parse(changelog, {});
   const latestVersionFromChangelog = parseChangelogAST(AST);
   const latestRelease = await getLatestRelease();
-  console.log("Latest release", latestRelease);
-  console.log("Latest version from changelog", latestVersionFromChangelog);
+  console.log("Latest release", latestRelease.name);
+  console.log(
+    "Latest version from changelog",
+    latestVersionFromChangelog.version
+  );
   if (semver$1.gt(latestVersionFromChangelog.version, latestRelease.tag_name)) {
     console.log("Creating draft release");
     createDraftRelease(latestVersionFromChangelog);
