@@ -2,9 +2,7 @@ import { Changelog } from './types/Changelog';
 import { ParsedChangelog } from './types/ParsedChangelog';
 
 export const parseChangelogAST = (AST: Changelog) => {
-  let latestVersion: ParsedChangelog;
-
-  AST.forEach((element, index) => {
+  const parsedVersions = AST.map((element, index) => {
     const previousElement = AST[index - 1];
     const nextElement2 = AST[index + 2];
 
@@ -14,36 +12,39 @@ export const parseChangelogAST = (AST: Changelog) => {
       nextElement2
     ) {
       if (element.content !== '[Unreleased]') {
-        latestVersion = {
+        const parsedVersion = {
           version: element.children[1].content,
           content: '',
         };
-        AST.slice(index + 2, AST.length).forEach((element, index) => {
+
+        for (let i = index + 2; i < AST.length; i++) {
+          const element = AST[i];
+
           if (element.type === 'heading_open' && element.tag === 'h2') {
-            return;
+            break;
           }
 
           if (element.type === 'heading_close') {
-            latestVersion.content += '\n';
-            return;
-          }
-
-          if (
-            !(
-              element.type.includes('bullet_list') ||
-              element.type.includes('list_item_close')
-            )
-          ) {
-            if (element.type.includes('paragraph_close')) {
-              latestVersion.content += '\n';
-            } else {
-              latestVersion.content += element.markup + element.content;
+            parsedVersion.content += '\n';
+          } else {
+            if (
+              !(
+                element.type.includes('bullet_list') ||
+                element.type.includes('list_item_close')
+              )
+            ) {
+              if (element.type.includes('paragraph_close')) {
+                parsedVersion.content += '\n';
+              } else {
+                parsedVersion.content += element.markup + element.content;
+              }
             }
           }
-        });
+        }
+        return parsedVersion;
       }
     }
-  });
+  }).filter(Boolean);
 
-  return latestVersion;
+  return parsedVersions[0];
 };
