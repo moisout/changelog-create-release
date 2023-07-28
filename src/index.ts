@@ -19,9 +19,11 @@ const updateOrCreateRelease = async () => {
   if (semver.gt(latestVersionFromChangelog.version, latestRelease.tag_name)) {
     console.log('Creating draft release');
     createDraftRelease(latestVersionFromChangelog);
-  } else {
-    console.log('Updating release');
+  } else if (latestRelease.draft) {
+    console.log('Latest release is a draft, updating it');
     updateRelease(latestRelease.id, latestVersionFromChangelog);
+  } else {
+    console.log('Latest release is not a draft, skipping');
   }
 };
 
