@@ -99566,26 +99566,25 @@ const parseChangelogAST = (AST) => {
       }
     }
   });
-  console.log("latest version");
-  console.log(latestVersion);
+  return latestVersion;
 };
-const getLatestRelease = async () => {
+
+const getReleases = async () => {
   const token = coreExports.getInput("github-token");
   const octokit = getOctokit_1(token);
   const releases = await octokit.rest.repos.listReleases({
     owner: context.repo.owner,
     repo: context.repo.repo
   });
-  console.log(releases);
-  const latestRelease = releases.data[0];
-  return latestRelease;
+  return releases;
 };
 const updateOrCreateRelease = async () => {
   const changelog = require$$0$2.readFileSync("./CHANGELOG.md", "utf8");
   const parser = new MarkdownIt();
   const AST = parser.parse(changelog, {});
-  parseChangelogAST(AST);
-  const latestRelease = await getLatestRelease();
+  const latestVersionFromChangelog = parseChangelogAST(AST);
+  console.log(latestVersionFromChangelog);
+  await getReleases();
   console.log("latest release");
   console.log(latestRelease);
 };

@@ -3,55 +3,9 @@ import { getInput, setFailed } from '@actions/core';
 import { getOctokit, context } from '@actions/github';
 import fs from 'fs';
 import MarkdownIt from 'markdown-it';
-import { Changelog } from './types/Changelog';
-
-const parseChangelogAST = (AST: Changelog) => {
-  let latestVersion;
-
-  AST.forEach((element, index) => {
-    const previousElement = AST[index - 1];
-    const nextElement2 = AST[index + 2];
-
-    if (
-      previousElement?.type === 'heading_open' &&
-      previousElement?.tag === 'h2' &&
-      nextElement2
-    ) {
-      if (element.content !== '[Unreleased]') {
-        latestVersion = {
-          version: element.children[1].content,
-          content: '',
-        };
-        AST.slice(index + 2, AST.length).forEach((element, index) => {
-          if (element.type === 'heading_open' && element.tag === 'h2') {
-            return;
-          }
-
-          if (element.type === 'heading_close') {
-            latestVersion.content += '\n';
-            return;
-          }
-
-          if (
-            !(
-              element.type.includes('bullet_list') ||
-              element.type.includes('list_item_close')
-            )
-          ) {
-            if (element.type.includes('paragraph_close')) {
-              latestVersion.content += '\n';
-            } else {
-              latestVersion.content += element.markup + element.content;
-            }
-          }
-        });
-      }
-    }
-  });
-
-  console.log('latest version');
-  console.log(latestVersion);
-};
+import { parseChangelogAST } from './changelogParser';
+import semver from 'semver';
+import { ParsedChangelog } from './types/ParsedChangelog';
 
 const getLatestRelease = async () => {
   const token = getInput('github-token');
@@ -63,9 +17,38 @@ const getLatestRelease = async () => {
     repo: context.repo.repo,
   });
 
-  console.log(releases);
   const latestRelease = releases.data[0];
   return latestRelease;
+};
+
+const createDraftRelease = async (latestVersion: ParsedChangelog) => {
+  const token = getInput('github-token');
+
+  const octokit = getOctokit(token);
+
+  await octokit.rest.repos.createRelease({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    tag_name: `v${latestVersion.version}`,
+    name: `v${latestVersion.version}`,
+    body: latestVersion.content,
+    draft: true,
+  });
+};
+
+const updateRelease = async (id: number, latestVersion: ParsedChangelog) => {
+  const token = getInput('github-token');
+
+  const octokit = getOctokit(token);
+
+  await octokit.rest.repos.updateRelease({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    release_id: id,
+    tag_name: `v${latestVersion.version}`,
+    name: `v${latestVersion.version}`,
+    body: latestVersion.content,
+  });
 };
 
 const updateOrCreateRelease = async () => {
@@ -74,9 +57,15 @@ const updateOrCreateRelease = async () => {
   const parser = new MarkdownIt();
 
   const AST = parser.parse(changelog, {});
-  parseChangelogAST(AST);
+  const latestVersionFromChangelog = parseChangelogAST(AST);
 
   const latestRelease = await getLatestRelease();
+
+  if (semver.gt(latestRelease.tag_name, latestVersionFromChangelog.version)) {
+    createDraftRelease(latestVersionFromChangelog);
+  } else {
+    updateRelease(latestRelease.id, latestVersionFromChangelog);
+  }
 
   console.log('latest release');
   console.log(latestRelease);
