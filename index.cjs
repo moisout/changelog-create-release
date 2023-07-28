@@ -17586,7 +17586,7 @@ const parseChangelogAST = (AST) => {
       }
     }
   }).filter(Boolean).sort((a, b) => semver$1.compare(b.version, a.version));
-  return parsedVersions[parsedVersions.length - 1];
+  return parsedVersions[0];
 };
 
 var github = {};
@@ -102617,7 +102617,7 @@ const getLatestRelease = async () => {
   });
   const latestRelease = releases.data.sort(
     (a, b) => semver$1.compare(b.name, a.name)
-  )[releases.data.length - 1];
+  )[0];
   return latestRelease;
 };
 const createDraftRelease = async (latestVersion) => {

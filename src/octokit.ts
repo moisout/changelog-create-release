@@ -15,7 +15,7 @@ export const getLatestRelease = async () => {
 
   const latestRelease = releases.data.sort((a, b) =>
     semver.compare(b.name, a.name)
-  )[releases.data.length - 1];
+  )[0];
   return latestRelease;
 };
 

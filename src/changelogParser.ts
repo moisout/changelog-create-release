@@ -55,5 +55,5 @@ export const parseChangelogAST = (AST: Changelog) => {
     .filter(Boolean)
     .sort((a, b) => semver.compare(b.version, a.version));
 
-  return parsedVersions[parsedVersions.length - 1];
+  return parsedVersions[0];
 };
