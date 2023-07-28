@@ -17557,8 +17557,11 @@ const parseChangelogAST = (AST) => {
     const nextElement2 = AST[index + 2];
     if (previousElement?.type === "heading_open" && previousElement?.tag === "h2" && nextElement2) {
       if (element.content !== "[Unreleased]") {
+        const version = element.children[1].content?.split("-")?.[0];
+        const semverVersion = semver$1.parse(version).version;
+        console.log(semverVersion);
         const parsedVersion = {
-          version: element.children[1].content?.split("-")?.[0],
+          version: semverVersion,
           content: ""
         };
         for (let i = index + 2; i < AST.length; i++) {

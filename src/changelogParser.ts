@@ -13,8 +13,11 @@ export const parseChangelogAST = (AST: Changelog) => {
       nextElement2
     ) {
       if (element.content !== '[Unreleased]') {
+        const version = element.children[1].content?.split('-')?.[0];
+        const semverVersion = semver.parse(version).version;
+        console.log(semverVersion);
         const parsedVersion = {
-          version: element.children[1].content,
+          version: semverVersion,
           content: '',
         };
 

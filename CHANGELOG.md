@@ -11,19 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Cool stuff
 
-## [1.0.2]
+## [1.0.2] - 2023-02-03
 
 ### Fixed
 
 - Another bug
 
-## [1.0.1]
+## [1.0.1] - 2023-02-02
 
 ### Fixed
 
 - A bug
 
-## [1.0.0]
+## [1.0.0] - 2023-02-01
 
 ### Added
 
