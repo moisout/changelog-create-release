@@ -13,9 +13,12 @@ export const getLatestRelease = async () => {
     repo: context.repo.repo,
   });
 
-  const latestRelease = releases.data.sort((a, b) =>
-    semver.compare(b.name, a.name)
-  )[0];
+  const latestRelease = releases.data.sort((a, b) => {
+    const releaseA = a.name.split('-')[0];
+    const releaseB = a.name.split('-')[0];
+    return semver.compare(releaseA, releaseB);
+  })[0];
+
   return latestRelease;
 };
 

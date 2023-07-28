@@ -102618,9 +102618,11 @@ const getLatestRelease = async () => {
     owner: context.repo.owner,
     repo: context.repo.repo
   });
-  const latestRelease = releases.data.sort(
-    (a, b) => semver$1.compare(b.name, a.name)
-  )[0];
+  const latestRelease = releases.data.sort((a, b) => {
+    const releaseA = a.name.split("-")[0];
+    const releaseB = a.name.split("-")[0];
+    return semver$1.compare(releaseA, releaseB);
+  })[0];
   return latestRelease;
 };
 const createDraftRelease = async (latestVersion) => {
