@@ -27,6 +27,6 @@
     "esbuild": "^0.18.11",
     "husky": "^8.0.0",
     "rollup": "^3.26.0",
-    "rollup-plugin-esbuild": "^5.0.0"
+    "rollup-plugin-esbuild": "^6.0.0"
   }
 }
