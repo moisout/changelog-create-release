@@ -1,13 +1,17 @@
 name: 'Changelog create release'
 description: 'Creates a new release whenever CHANGELOG.md changes'
+branding:
+  color: 'blue'
+  icon: file-text
+
 inputs:
   github-token:
     description: 'GITHUB TOKEN'
     required: true
     default: ''
 outputs:
-  time:
-    description: 'The time we greeted you'
+  release-version:
+    description: 'The updated release version'
 runs:
-  using: 'node16'
-  main: 'index.cjs'
+  using: 'node20'
+  main: 'dist/index.cjs'

@@ -2,7 +2,7 @@ import semver from 'semver';
 import { Changelog } from './types/Changelog';
 import { ParsedChangelog } from './types/ParsedChangelog';
 
-export const parseChangelogAST = (AST: Changelog) => {
+export const parseChangelogAST = (AST: Changelog): ParsedChangelog => {
   const parsedVersions = AST.map((element, index) => {
     const previousElement = AST[index - 1];
     const nextElement2 = AST[index + 2];
@@ -13,6 +13,12 @@ export const parseChangelogAST = (AST: Changelog) => {
       nextElement2
     ) {
       if (element.content !== '[Unreleased]') {
+        if (!element.children?.[1]) {
+          throw new Error(
+            `Version ${element.content} is not a link. Make sure you complete the link section at the bottom of CHANGELOG.md`
+          );
+        }
+
         const version = element.children[1].content?.split('-')?.[0];
         const semverVersion = semver.parse(version).version;
         console.log(semverVersion);

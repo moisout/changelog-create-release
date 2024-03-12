@@ -1,5 +1,5 @@
 import './polyfills/crypto';
-import { setFailed } from '@actions/core';
+import { setFailed, setOutput } from '@actions/core';
 import fs from 'fs';
 import MarkdownIt from 'markdown-it';
 import { parseChangelogAST } from './changelogParser';
@@ -23,21 +23,27 @@ const updateOrCreateRelease = async () => {
   );
 
   if (semver.gt(latestVersionFromChangelog.version, latestRelease.tag_name)) {
-    console.log('Creating draft release');
     createDraftRelease(latestVersionFromChangelog);
+    setOutput(
+      'release-version',
+      `Created draft release for v${latestVersionFromChangelog.version}`
+    );
   } else if (latestRelease.draft) {
-    console.log('Latest release is a draft, updating it');
     updateRelease(latestRelease.id, latestVersionFromChangelog);
+    setOutput(
+      'release-version',
+      `Updated draft release for v${latestVersionFromChangelog.version}`
+    );
   } else {
-    console.log('Latest release is not a draft, skipping');
+    setOutput(
+      'release-version',
+      `Skipped updating an already published release for v${latestVersionFromChangelog.version}`
+    );
   }
 };
 
 try {
   updateOrCreateRelease();
-
-  // const payload = JSON.stringify(githubContext.payload, undefined, 2);
-  // console.log(`The event payload: ${payload}`);
 } catch (error) {
   setFailed(error.message);
 }
