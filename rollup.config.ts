@@ -14,7 +14,7 @@ const pkgs = <T>(el: T) => Object.keys(el);
 export default {
   input: 'src/index.ts',
   output: {
-    dir: 'dist',
+    file: 'dist/index.cjs',
     format: 'cjs',
     globals: { crypto: 'crypto' },
   },

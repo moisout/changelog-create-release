@@ -14060,7 +14060,6 @@ const parseChangelogAST = (AST) => {
         }
         const version = element.children[1].content?.split("-")?.[0];
         const semverVersion = semver$1.parse(version).version;
-        console.log(semverVersion);
         const parsedVersion = {
           version: semverVersion,
           content: ""
