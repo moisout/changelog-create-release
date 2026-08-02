@@ -15,8 +15,8 @@ dependencies:
     specifier: 14.0.0
     version: 14.0.0
   semver:
-    specifier: 7.6.0
-    version: 7.6.0
+    specifier: 7.8.5
+    version: 7.8.5
 
 devDependencies:
   '@rollup/plugin-commonjs':
@@ -35,8 +35,8 @@ devDependencies:
     specifier: 20.11.26
     version: 20.11.26
   '@types/semver':
-    specifier: 7.5.8
-    version: 7.5.8
+    specifier: 7.8.0
+    version: 7.8.0
   cross-env:
     specifier: 7.0.3
     version: 7.0.3
@@ -600,8 +600,8 @@ packages:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
     dev: true
 
-  /@types/semver@7.5.8:
-    resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
+  /@types/semver@7.8.0:
+    resolution: {integrity: sha512-1mAINjtQCXXeLkJ9ehXkwOcBpqtLxiVtKhpUf83DdRNdQKV0iXZpaHYqRr7nj+wvxuJzoAmAwXI+sCNMv1CzLQ==}
     dev: true
 
   /argparse@2.0.1:
@@ -803,13 +803,6 @@ packages:
       uc.micro: 2.1.0
     dev: false
 
-  /lru-cache@6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
-    dependencies:
-      yallist: 4.0.0
-    dev: false
-
   /magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
     engines: {node: '>=12'}
@@ -921,12 +914,10 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /semver@7.6.0:
-    resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
+  /semver@7.8.5:
+    resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
     engines: {node: '>=10'}
     hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
     dev: false
 
   /shebang-command@2.0.0:
@@ -985,7 +976,3 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-
-  /yallist@4.0.0:
-    resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
-    dev: false
